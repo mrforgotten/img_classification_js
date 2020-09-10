@@ -1,0 +1,63 @@
+<html>
+
+<head>Hello There</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.3.0/dist/tf.min.js"></script>
+
+
+<body>
+	<p><input type="file" accept="image/*" name="image" id="file" onchange="loadFile(event)"></p>
+	<p><label for="file" style="cursor: pointer;">Upload Image</label></p>
+	<img id="img" style="width: 300;"/>
+	<p id="">asdf</p>
+	<p id="result" ></p>
+
+	<script>
+		var loadFile = function (event) {
+			var image = document.getElementById('img');
+			image.src = URL.createObjectURL(event.target.files[0]);
+			predic(image)
+			
+		};
+	</script>
+	<script>
+		// Define a model for linear regression.
+		
+		async function importModel() {
+			const model = await tf.loadLayersModel('./tfjsmodel/model.json');
+			console.log("import success")
+			// console.log(model.summary())
+			return model;
+		}
+		async function predic(image){
+			src_img = image.src
+			console.log("importing model")
+			model = await importModel();
+			console.log("predicting")
+	
+			resized_img = tf.browser.fromPixels(document.getElementById("img")).resizeBilinear([256,256]) // [7, 7, 3]
+	
+			let b=tf.fill([256,256,3],255)
+			
+			resized_img=tf.div(resized_img,b)
+	
+			resized_img=tf.reshape(resized_img, [1, 256, 256, 3],'resize')
+	
+			predictor = await model.predict(resized_img)
+	
+			score = predictor.dataSync()[0]
+			let result = document.getElementById('result');
+			result.innerHTML = `<p>${pizza_notpizza(score)} with ${score*100}% being pizza</p>`
+		}
+		function pizza_notpizza(value){
+			let ss = value*100
+			if(ss >=94){
+				return 'it\'s a pizza'
+			}
+			
+			return 'not pizza'
+		}
+	</script>
+</body>
+
+</html>
