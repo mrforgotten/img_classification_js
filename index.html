@@ -61,9 +61,6 @@
                 <div class="input-group mb-3 px-1 py-1 round bg-white shadow-sm">
 					<input id="file" type="file" accept="image/*"  name="image" onchange="loadFile(event)" class="upload form-control border-0">
                     <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
-                    <div class="input-group-append">
-                        <label for="upload" class="btn btn-light round m-0 px-4"></label>
-					</div>
                 </div>
             </div>
         </div>
@@ -103,13 +100,13 @@
 		predictor = await model.predict(resized_img)
 
 		score = predictor.dataSync()[0]
-		Math.ceil(score * 1000) / 1000
+		score = Math.ceil(score * 100 * 1000) / 1000
 		let result = document.getElementById('result');
 		result.innerHTML = `<p>${pizza_notpizza(score)}</p>
 							<p>${score * 100}% being pizza</p>`
 	}
 	function pizza_notpizza(value) {
-		let ss = value * 100
+		let ss = value
 		if (ss >= 94) {
 			return 'it\'s a pizza'
 		}
