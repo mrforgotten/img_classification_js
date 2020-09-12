@@ -54,7 +54,7 @@
 			<h1 class="display-4">Pizza or Not Pizza</h1>
 			<p class="lead mb-0 mb-3">Upload your image for test the A.I.</p>
 			<img id="img"/>
-			<p id="result"></p>
+			<h4 id="result" class="py-2"></h4>
 		</header>
 		<div class="row">
             <div class="col-lg-6 mx-auto">
@@ -103,7 +103,7 @@
 
 		predictor = await model.predict(resized_img)
 
-		score = predictor.dataSync()[0].toFixed(3)
+		score = predictor.dataSync()[0].toFixed(5)
 		let result = document.getElementById('result');
 		result.innerHTML = `<p>${pizza_notpizza(score)} with ${score * 100}% being pizza</p>`
 	}
