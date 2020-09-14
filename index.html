@@ -80,7 +80,6 @@
 	async function importModel() {
 		const model = await tf.loadLayersModel('./tfjsmodel/model.json');
 		console.log("import success")
-		// console.log(model.summary())
 		return model;
 	}
 	async function predic(image) {
@@ -88,26 +87,27 @@
 		console.log("importing model")
 		model = await importModel();
 		console.log("predicting")
+		
+		resized_img = tf.browser.fromPixels(document.getElementById("img")).resizeBilinear([256, 256]) //resize image to new shape using bilinear. Don't remember which stackoverflow I got form
+		//after transform, each array of the matrix is rgb code, then we need to normalize it
+		let b = tf.fill([256, 256, 3], 255) // making an array fill with 255
 
-		resized_img = tf.browser.fromPixels(document.getElementById("img")).resizeBilinear([256, 256]) // [7, 7, 3]
+		resized_img = tf.div(resized_img, b) // array resized_img/b, so every matrix in the array will be normallize by /255. If not, after the prediction will become 0 or 1
 
-		let b = tf.fill([256, 256, 3], 255)
-
-		resized_img = tf.div(resized_img, b)
-
-		resized_img = tf.reshape(resized_img, [1, 256, 256, 3], 'resize')
+		resized_img = tf.reshape(resized_img, [1, 256, 256, 3], 'resize') // after that we have to reshape image to 3D array again, if not it will show error that image is not 3D array
 
 		predictor = await model.predict(resized_img)
 
-		score = predictor.dataSync()[0]
-		score = Math.ceil(score * 100 * 1000) / 1000
+		score = predictor.dataSync()[0] //score result
+		score = Math.ceil(score * 100 * 1000) / 1000 //just want to ceil up the third digit to make it in 3 decimal
 		let result = document.getElementById('result');
 		result.innerHTML = `<p>${pizza_notpizza(score)}</p>
 							<p>Pizza\'s ${score}</p>`
 	}
 	function pizza_notpizza(value) {
 		let ss = value
-		if (ss >= 94) {
+		// our model is not as good as 100% predic not pizza, so this function will help us filter pizza or not pizza
+		if (ss >= 60) {
 			return 'It\'s a pizza'
 		}
 		return 'It\'s not a pizza'
