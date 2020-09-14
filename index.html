@@ -103,12 +103,12 @@
 		score = Math.ceil(score * 100 * 1000) / 1000
 		let result = document.getElementById('result');
 		result.innerHTML = `<p>${pizza_notpizza(score)}</p>
-							<p>${score}% being pizza</p>`
+							<p>$Pizza's {score}%</p>`
 	}
 	function pizza_notpizza(value) {
 		let ss = value
 		if (ss >= 94) {
-			return 'it\'s a pizza'
+			return 'It\'s a pizza'
 		}
 		return 'It\'s not a pizza'
 	}
