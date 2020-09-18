@@ -1,6 +1,6 @@
 # pizza_notpizza_js
 Using tensorflowJS.
-Compile model by using tfjs before use it with js.
+Compile model by using tfjs before using it with js.
 
 # By
 * Kiatisak Pethor 61130500205​
