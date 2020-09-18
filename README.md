@@ -7,4 +7,4 @@ Compile model by using tfjs before using it with js.
 * Chaichet Phaibunwitthayasak 61130500207​
 * Vorapol Charoenkitmongkol 61130500224​
 
-​
+visit site https://mrforgotten.github.io/pizza_notpizza_js/
